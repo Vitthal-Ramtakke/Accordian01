@@ -1,84 +1,73 @@
-const data = [
-  {
-    id: "1",
-    question: "What are accordion components?",
-    answer:
-      "Accordion components are user interface elements used for organizing and presenting content in a collapsible manner. They typically consist of a header, content, and an expand/collapse action.",
-  },
-  {
-    id: "2",
-    question: "What are they used for?",
-    answer:
-      "They are commonly employed in various contexts, including FAQs, product descriptions, navigation menus, settings panels, and data tables, to save screen space and provide a structured and user-friendly interface for presenting information or options.",
-  },
-  {
-    id: "3",
-    question: "Accordion as a musical instrument",
-    answer:
-      "The accordion is a musical instrument with a keyboard and bellows. It produces sound by air passing over reeds when the player expands or compresses the bellows, used in various music genres.",
-  },
-  {
-    id: "4",
-    question: "Can I create an accordion component with a different framework?",
-    answer:
-      "Yes of course, it is very possible to create an accordion component with another framework.",
-  },
-];
+/*Declare a constant variable named hexBtn and hexColorValue and assigns it the value of an HTML element with the class name “hex-btn" and hexColorValue. */
+const hexBtn = document.querySelector(".hex-btn");
+const hexColorValue = document.querySelector(".hex-color-vlaue");
+const hexColorContainer = document.querySelector(".hex-color-container");
+const hexCopyColor = document.querySelector(".hex-copy-color");
 
-// logic step 1 : select the html element with class name accordian
-const accordionWrapper = document.querySelector(".accordion");
-// This part of the code document.querrySelector(".accordian") will find the html element whose class is accordion in the html document.
+// Generating Hex color
 
-/* logic step 2 : Create accordian data
-1) We use a function called createAccordionData() to build the HTML for the accordion.
-2) Now we will manipulate the div with the class name .accordian, which is stored in accordianWrapper varaible, with the help of this property .innerHTML
-3) Now we will map the data array and create the necessary HTML Structure and then after that we will join it by using .join() method.
-4) For each item, it makes a “box” with the question and answer inside. */
+/*Logic : 1) hexBtn.addEventListener("click", () => { ... }); 
+This line adds an event listener to an HTML element with the class name “hexBtn” whenever the button is clicked the code inside the curly braces will execute.
 
-function createAccordionData() {
-  accordionWrapper.innerHTML = data
-    .map(
-      (dataItem) => `
-    <div class="accordion_item">
-    <div class="accordion_title">
-    <h3>${dataItem.question}</h3>
-    <i class="fa-solid fa-arrow-down"></i>
-    </div>
-    <div class="accordion_content">
-    <p>${dataItem.answer}</p>
-    </div>
-    </div>
-    `
-    )
-    .join(" ");
+2)* Inside curly braces intilaize two variables characterSet with the characters "0123456789ABCDEF" , This string represents the valid characters for a hexadecimal color code.
+And hexColorOutput to store the generated hexadecimal color code
+
+3) The loop will runs 6 times (from i = 0 to i < 6),
+     I) Generate random floating number betn 0 to 1 using Math.random() method
+     II)Multiply the random number by the length of the characterSet
+     III) Using Math.floor() method rounds down the result to the nearest integer
+     IV)  Retrieves the character at the computed index from the characterSet by using charAT.
+     And Appends this character to the hexColorOutput string.
+     V)Result - After the loop completes, hexColorOutput will contain a randomly generated six-character hexadecimal color code. for Eg - "#3A7B9F" */
+
+hexBtn.addEventListener("click", () => {
+  let characterSet = "0123456789ABCDEF";
+  let hexColorOutput = "";
+
+  for (i = 0, charSetLength = characterSet.length; i < 6; ++i) {
+    hexColorOutput += characterSet.charAt(
+      Math.floor(Math.random() * charSetLength)
+    );
+  }
+
+  /* changing the text content of hexColorValue element to a string, whenever we click the button */
+  hexColorValue.textContent = `#${hexColorOutput}`;
+
+  /* sets the background color of the hexColorContainer element to the value represented by the hexColorOutput variable */
+  hexColorContainer.style.backgroundColor = `#${hexColorOutput}`;
+});
+
+// Generating rgb color
+const rgbBtn = document.querySelector(".rgb-btn");
+const getRedInputRange = document.querySelector("#red");
+const getGreenInputRange = document.querySelector("#green");
+const getBlueInputRange = document.querySelector("#blue");
+const rgbColorContainer = document.querySelector(".rgb-color-container");
+const rgbCopyBtn = document.querySelector(".rgb-copy-color");
+const rgbColorValue = document.querySelector(".rgb-color-value");
+const rgbCopyColor = document.querySelector(".rgb-copy-color");
+
+rgbBtn.addEventListener("click", () => {
+  let extractRedValue = getRedInputRange.value;
+  let extractGreenValue = getGreenInputRange.value;
+  let extractBlueValue = getBlueInputRange.value;
+
+  rgbColorValue.textContent = `rgb(${extractRedValue}, ${extractGreenValue}, ${extractBlueValue})`;
+  rgbColorContainer.style.backgroundColor = `rgb(${extractRedValue}, ${extractGreenValue}, ${extractBlueValue})`;
+});
+
+// Copy to clipboard functionality
+
+function copyHexColorToClipBoard() {
+  navigator.clipboard.writeText(hexColorValue.textContent);
+  alert("Hex Color is copied to clipboard! ");
 }
 
-createAccordionData();
-  
+hexCopyColor.addEventListener("click", copyHexColorToClipBoard);
 
-/*Logic step 3 : select and store all the elements with the class .accordion_title  */
+function copyRgbColorToClipBoard() {
+  navigator.clipboard.writeText(rgbColorValue.textContent);
+  alert("Hex Color is copied to clipboard !");
+}
 
-const getAccordionTitles = document.querySelectorAll(".accordion_title");
-
-console.log("===================================");
-console.log(getAccordionTitles);
-console.log("====================================");
-
-getAccordionTitles.forEach((currentItem) => {
-  currentItem.addEventListener("click", (event) => {
-    if (currentItem.classList.contains("active")) {
-      currentItem.classList.remove("active");
-    } else {
-      /*first selects all elements with the class "active" and stores them in the getAlreadyAddedActiveClasses variable.  */
-      let getAlreadyAddedActiveClasses = document.querySelectorAll(".active");
-
-      /*Then, it iterates through each of these elements and removes the "active" class. */
-      getAlreadyAddedActiveClasses.forEach((currentActiveItem) => {
-        currentActiveItem.classList.remove("active");
-      });
-
-      /*Finally, it adds the "active" class to another element (i.e currentItem). */
-      currentItem.classList.add("active");
-    }
-  });
-});
+rgbCopyColor.addEventListener("click", copyRgbColorToClipBoard);
